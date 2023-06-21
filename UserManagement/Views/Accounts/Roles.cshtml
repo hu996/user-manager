@@ -1,0 +1,145 @@
+﻿@model RolesViewModel
+@{
+    ViewData["Title"] = "Roles";
+}
+
+
+<div class="row mb-2">
+    <div class="col-sm-6">
+        <h1 class="m-0">Dashboard</h1>
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Home/Index">Home</a></li>
+            <li class="breadcrumb-item active"> Roles Manage</li>
+        </ol>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+ <section class="content">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="card">
+              <div class="card-header">
+              @*  <h3 class="card-title">DataTable with minimal features & hover style</h3>*@
+                        <button type="button" class="btn btn-primary" onclick="reset()" data-toggle="modal" data-target="#exampleModal">
+                          Add Role
+                        </button>
+
+              </div>
+              <!-- /.card-header -->
+              <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                  <thead>
+                  <tr>
+                    <th>ٌRole Name</th>
+                    <th>Actions</th>
+                   
+                  </tr>
+                  </thead>
+                  <tbody>
+                                @foreach(var item in Model.Roles)
+                                {
+                                    <tr>
+                                        <td>
+                                            @switch (@item.Name)
+                                            {
+                                                case "SuperAdmin":
+                                                <span class="badge badge-danger" style="width:250px;height:25px;">@item.Name</span>
+                                                break;
+                                                case "Admin":
+                                                <span class="badge badge-success" style="width:250px;height:25px;">@item.Name</span>
+                                                break;
+                                               
+                                                default:
+                                                <span class="badge badge-warning" style="width:250px;height:25px;">@item.Name</span>
+                                                break;
+                                            }
+                                        </td>
+                                        
+                                        <td>
+                                            <input type="submit" class="btn btn-info"   value="Edit">
+                                             <a type="submit" class="btn btn-info" asp-action="DeleteRole" asp-controller="Accounts" asp-route-Id="@item.Id">Delete</a>
+                                            <a type="submit" class="btn btn-info" asp-action="Index" asp-controller="Permission" asp-route-Id="@item.Id"> Permission</a>
+                                        </td>
+                                    </tr>
+
+                                }
+                                
+                  </tbody>
+                  <tfoot>
+                 
+                  </tfoot>
+                </table>
+              </div>
+              <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            <!-- Button trigger modal -->
+            </div>
+           
+            </div>
+            </div>
+            </div>
+            </section>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+                <h5 class="modal-title" id="title">Add New Role</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+       <form asp-action="Roles" asp-controller="Accounts" method="post">
+           <div class="form-group">
+               <input type="text" hidden asp-for="newrole.RoleId" id="roleId" />
+           <label asp-for="newrole.RoleName" class="controle-label">Role Name</label>
+           <input type="text" class="form-controle" asp-for="newrole.RoleName" id="roleName" />
+           </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-secondary" data-dismiss="modal"  value="close">
+                        <input type="submit" class="btn btn-primary" id="Save" value="Save">
+                    </div>
+       </form>
+      </div>
+      
+    </div>
+  </div>
+</div>
+@section Scripts{
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("MessageType")))
+    {
+        if (Context.Session.GetString("MessageType") == "Success")
+        {
+            <script>
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: @Context.Session.GetString("Title"),
+                    text:@Html.Raw(Context.Session.GetString("Message")),
+                    showConfirmButton: OK,
+                    timer: 1500
+                })
+                </script>
+        }
+        else{
+            <script>
+    Swal.fire({
+        icon: 'error',
+        title: @Context.Session.GetString("Title"),
+        text: @Html.Raw(Context.Session.GetString("Message")),
+            showConfirmButton: OK,
+            timer: 1500
+       
+    })
+            </script>
+        }
+        Context.Session.SetString("MessageType", "");
+
+    }
+
+}
+<script src="~/Models/Roles.js"></script>

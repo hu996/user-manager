@@ -1,0 +1,177 @@
+﻿@model RegisterViewModel
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="row mb-2">
+    <div class="col-sm-6">
+        <h1 class="m-0">Dashboard</h1>
+    </div><!-- /.col -->
+    <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-right">
+            <li class="breadcrumb-item"><a href="/Home/Index">Home</a></li>
+            <li class="breadcrumb-item active"> Users Manage</li>
+        </ol>
+    </div><!-- /.col -->
+</div><!-- /.row -->
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                      
+                        <button type="button" class="btn btn-primary" onclick="reset()" data-toggle="modal" data-target="#exampleModal">
+                            Add User
+                        </button>
+
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body">
+                        <table id="example2" class="table table-bordered table-hover">
+                            <thead>
+                                <tr>
+                                    <th> Name</th>
+                                  @*  <th>Role</th>*@
+                                    <th>Image </th>
+                                    <th>Email </th>
+                                    <th>ActiveUser </th>
+                                   
+                                    <th>Events</th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Users)
+                                {
+                                    <tr>
+                                        <td>@item.Name</td>
+                                       @* <td>@item.Role</td>*@
+                                        <td><img src="Images/Users/@item.ImageUser" class="img-bordered img-circle img-circle" 
+                                            style="width:50px;height:50px;"/></td>
+                                        <td>@item.Email</td>
+                                        <td><input type="checkbox" disabled checked="@item.ActiveUser" style="width:35px;height:35px;" ></td>
+                                        
+                                        
+
+                                        <td>
+                                            @*<input type="submit" class="btn btn-info btn-sm" onclick="Edit('@item.Id','@item.Name','@item.ImageUser',
+                                            '@item.Email','@item.ActiveUser')" value="Edit">*@
+                                            <a type="submit" class="btn btn-info btn-sm" asp-action="Register" asp-controller="Accounts" asp-route-Id="@item.Id">Edite</a>
+                                            <a type="submit" class="btn btn-info btn-sm" asp-action="DeleteUser" asp-controller="Accounts" asp-route-Id="@item.Id">Delete</a>
+                                            <a type="submit" class="btn btn-info btn-sm" asp-action="ChangePassword" asp-controller="Accounts" asp-route-Id="@item.Id">Change Password</a>
+                                        </td>
+                                    </tr>
+
+                                }
+
+                            </tbody>
+                            <tfoot>
+                            </tfoot>
+                        </table>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+                <!-- Button trigger modal -->
+            </div>
+
+        </div>
+    </div>
+    </div>
+</section>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="title">Add New User</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form asp-action="Register" asp-controller="Accounts" method="post" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <input type="text" hidden asp-for="newregister.ID" id="UserId" />
+                        <label asp-for="newregister.Name" class="controle-label"> Name</label>
+                        <input type="text" class="form-controle" asp-for="newregister.Name" id="UserName" />
+                    </div>
+                     <div class="form-group">
+                       
+                        <label asp-for="newregister.Email" class="controle-label"> Email</label>
+                        <input type="text" class="form-controle" asp-for="newregister.Email" id="UserEmail" />
+                    </div>
+                   @* <div class="form-group">
+
+                        <label asp-for="newregister.Name" class="controle-label"> Name</label>
+                        <input type="text" class="form-controle" asp-for="newregister.Name" id="UserName" />
+                    </div>*@
+                     <div class="form-group">
+                        <label asp-for="newregister.ImageUser" class="controle-label"> Upload Image</label>
+                        <input type="file" class="form-controle" asp-for="newregister.ImageUser" id="UserImage" />
+                    </div>
+                    @* <div class="form-group">
+                        <label asp-for="newregister.RoleName" class="controle-label">Role </label>
+                        <input type="text" class="form-controle" asp-for="newregister.RoleName" id="RoleName" />
+                    </div>*@
+                     <div class="form-group">
+                        <label asp-for="newregister.RoleName" class="controle-label">Role Name</label>
+                        <select class="form-controle" asp-for="newregister.RoleName" 
+                        asp-items="@(new SelectList(Model.Roles,"Name","Name"))">
+                        <options value=""> Select User Role Name   </options></select>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="newregister.IsActiveUser" class="controle-label">Activate User</label>
+                        <input type="checkbox" class="form-controle" asp-for="newregister.IsActiveUser" id="ActiveUser" />
+                    </div>
+                     <div class="form-group">
+                        <label asp-for="newregister.Password" class="controle-label"> Password </label>
+                        <input type="password" class="form-controle" asp-for="newregister.Password" id="UserPassword" />
+                    </div>
+                    <div class="modal-footer">
+                        <input type="submit" class="btn btn-secondary" data-dismiss="modal" value="close">
+                        <input type="submit" class="btn btn-primary" id="Save" value="Save">
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section Scripts{
+    @if (!string.IsNullOrEmpty(Context.Session.GetString("MessageType")))
+    {
+        if (Context.Session.GetString("MessageType") == "Success")
+        {
+            <script>
+                Swal.fire({
+                    position: 'top-end',
+                    icon: 'success',
+                    title: @Context.Session.GetString("Title"),
+                    text: @Html.Raw(Context.Session.GetString("Message")),
+                    showConfirmButton: OK,
+                    timer: 1500
+                })
+            </script>
+        }
+        else
+        {
+            <script>
+                Swal.fire({
+                    icon: 'error',
+                    title: @Context.Session.GetString("Title"),
+                    text: @Html.Raw(Context.Session.GetString("Message")),
+                    showConfirmButton: OK,
+                    timer: 1500
+
+                })
+            </script>
+        }
+        Context.Session.SetString("MessageType", "");
+
+    }
+
+}
+<script src="~/Models/Register.js"></script>
+
